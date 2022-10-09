@@ -36,7 +36,7 @@ class BinusScraper:
 
     async def login(self, email: str, password: str):
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False)
+            browser = await p.chromium.launch(headless=True)
             page = await browser.new_page()
 
             await page.goto(PAGES["login"])
@@ -56,9 +56,9 @@ class BinusScraper:
             profile_picture_url = ''
             profile_picture_node = await page.query_selector('span[class=avatar]')
             if profile_picture_node is not None:
-                children = profile_picture_node.query_selector_all('xpath=child::*')
+                children = await profile_picture_node.query_selector_all('xpath=child::*')
                 if len(children) != 0:
-                    profile_picture_url = children[0].get_attribute("src")
+                    profile_picture_url = await children[0].get_attribute("src")
 
             semesters = []
             semester_select_element = await page.query_selector("select[name=ddSemester]")
@@ -113,8 +113,6 @@ class BinusScraper:
                     current_enrichment[PARSE_TABLE[key]] = value
 
                 enrichments.append(current_enrichment)
-
-            print(enrichments)
 
             # todo: save cookies
             await browser.close()
