@@ -15,7 +15,7 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
 
   const handleLogin = async () => {
-    await login();
+    await login(loginParams);
   };
 
   return (

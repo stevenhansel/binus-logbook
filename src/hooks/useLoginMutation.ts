@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-const useLoginMutation = () => {
+import { LoginParams } from '../types/domain';
+import { HookState, UseMutation } from '../types/hooks';
+
+const useLoginMutation: UseMutation = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = async (loginParams: LoginParams) => {
+  const triggerMutation = async (loginParams: LoginParams) => {
     setError('')
     setIsLoading(true)
-    setIsFetched(true)
 
     try {
     } catch (err) {
@@ -17,13 +19,15 @@ const useLoginMutation = () => {
     setIsLoading(false)
   };
 
-  return [
-    login,
-    {
-      isLoading,
-      error,
-    },
-  ];
+  const hookState: HookState = useMemo(() => ({
+    isLoading,
+    error,
+  }), [isLoading, error])
+
+  return useMemo(() => [
+    triggerMutation,
+    hookState,
+  ], [triggerMutation, hookState]);
 };
 
 export default useLoginMutation;
