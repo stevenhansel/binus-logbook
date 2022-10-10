@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"github.com/stevenhansel/binus-logbook/scraper/internal/container"
+	"github.com/stevenhansel/binus-logbook/scraper/internal/http/controllers"
 )
 
 type Server struct {
@@ -17,6 +18,8 @@ type Server struct {
 
 func (s *Server) routes() chi.Router {
 	r := chi.NewRouter()
+
+	controllers.NewStudentController(r, s.container.Responseutil).Routes()
 
 	return r
 }
@@ -39,4 +42,3 @@ func New(container *container.Container) *Server {
 		container: container,
 	}
 }
-

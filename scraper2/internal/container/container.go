@@ -1,13 +1,19 @@
 package container
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+
+	"github.com/stevenhansel/binus-logbook/scraper/internal/http/responseutil"
+)
 
 type Container struct {
-	log *zap.Logger
+	Log          *zap.Logger
+	Responseutil *responseutil.Responseutil
 }
 
-func New(log *zap.Logger) *Container {
+func New(log *zap.Logger, responseutil *responseutil.Responseutil) *Container {
 	return &Container{
-		log: log,
+		Log:          log,
+		Responseutil: responseutil,
 	}
 }
