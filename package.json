@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "ui:dev": "vite",
-    "scraper:dev": "(cd scraper && poetry run start)",
+    "scraper:dev": "(cd scraper && go run cmd/api/main.go)",
     "dev": "concurrently \"yarn ui:dev\" \"yarn scraper:dev\"",
     "build": "tsc && vite build",
     "preview": "vite preview"
