@@ -19,7 +19,7 @@ type Server struct {
 func (s *Server) routes() chi.Router {
 	r := chi.NewRouter()
 
-	controllers.NewStudentController(r, s.container.Responseutil).Routes()
+	controllers.NewStudentController(r, s.container.Responseutil, s.container.StudentService).Routes()
 
 	return r
 }

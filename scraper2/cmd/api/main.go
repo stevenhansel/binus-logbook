@@ -12,9 +12,11 @@ import (
 	"github.com/playwright-community/playwright-go"
 	"go.uber.org/zap"
 
+	"github.com/stevenhansel/binus-logbook/scraper/internal/binus"
 	"github.com/stevenhansel/binus-logbook/scraper/internal/container"
 	internalhttp "github.com/stevenhansel/binus-logbook/scraper/internal/http"
 	"github.com/stevenhansel/binus-logbook/scraper/internal/http/responseutil"
+	"github.com/stevenhansel/binus-logbook/scraper/internal/student"
 )
 
 func main() {
@@ -31,7 +33,10 @@ func main() {
 
 	responseutil := responseutil.New(log)
 
-	container := container.New(log, responseutil)
+	binusScraper := binus.New()
+	studentService := student.NewService(binusScraper)
+
+	container := container.New(log, responseutil, studentService)
 	server := internalhttp.New(container)
 
 	stop := make(chan struct{})

@@ -38,21 +38,18 @@ func (r *Response) JSON(httpCode int, data interface{}) {
 }
 
 type StructuredApiError struct {
-	errorCode ErrorCode
-	message   interface{}
+	message interface{}
 }
 
-func (r *Response) Error4xx(httpCode int, errorCode ErrorCode, message interface{}) {
+func (r *Response) Error4xx(httpCode int, message interface{}) {
 	r.JSON(httpCode, &StructuredApiError{
-		errorCode: errorCode,
-		message:   message,
+		message: message,
 	})
 }
 
 func (r *Response) Error5xx(err error) {
 	r.log.Error("api", zap.String("error", fmt.Sprint(err)))
 	r.JSON(http.StatusInternalServerError, &StructuredApiError{
-		errorCode: InternalServerError,
-		message:   "An unknown error occurred during processing the request",
+		message: "An unknown error occurred during processing the request",
 	})
 }

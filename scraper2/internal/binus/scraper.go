@@ -46,9 +46,9 @@ type Semester struct {
 }
 
 var studentDashboardParseTable = map[string]string{
-	"ENRICHMENT_TRACK":              "Track",
+	"ENRICHMENT TRACK":              "Track",
 	"Company Partner:":              "CompanyPartner",
-	"Position":                      "Position",
+	"Position:":                     "Position",
 	"Location:":                     "Location",
 	"Working/Office Hours:":         "WorkingOfficeHours",
 	"Site Supervisor:":              "SiteSupervisorName",
@@ -66,7 +66,7 @@ func (s *BinusScraper) Login(email, password string) (*Student, error) {
 
 	defer pw.Stop()
 
-	headless := false
+	headless := true
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
 		Headless: &headless,
 	})
