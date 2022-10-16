@@ -5,4 +5,4 @@ export type HookState<R = any> = {
   refetch?: () => {},
 }
 
-export type UseMutation<R = any> = () => [(args: any) => void, HookState<R>]
+export type UseMutation<R = any> = () => [(args: any) => Promise<void>, HookState<R>]

@@ -1,26 +1,24 @@
 export type User = {
   name: string,
-  profilePictureUrl: string,
+  email: string,
   enrichments: Enrichment[],
 };
 
 export type Enrichment = {
-  id: number,
-  semester: string,
-  semesterValue: string,
-  track: string,
   companyPartner: string,
-  position: string,
-  location: string,
-  workingOfficeHours: string,
-  siteSupervisorName: string,
-  siteSupervisorEmail: string,
-  siteSupervisorPhoneNumber: string,
   facultySupervisor: string,
+  location: string,
   officePhoneNumber: string,
+  position: string,
+  semesterName: string,
+  siteSupervisorEmail: string,
+  siteSupervisorName: string,
+  siteSupervisorPhoneNumber: string,
+  track: string,
+  workingOfficeHours: string,
 };
 
 export type LoginParams = {
-  username: string;
+  email: string;
   password: string;
 };
