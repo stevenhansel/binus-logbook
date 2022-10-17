@@ -1,4 +1,4 @@
-import { StateCreator } from "zustand"
+import { StateCreator } from 'zustand'
 
 import doRequest from '../../utils/request'
 
@@ -6,10 +6,10 @@ import { UserSlice } from '../../types/stores'
 import { User, LoginParams } from '../../types/domain'
 
 const createUserSlice: StateCreator<
-  UserSlice,
-  [],
-  [],
-  UserSlice
+UserSlice,
+[],
+[],
+UserSlice
 > = (set) => ({
   isAuth: false,
   user: null,
@@ -17,16 +17,18 @@ const createUserSlice: StateCreator<
   setUser: (newUser: User | null) => set(() => ({ user: newUser })),
   login: async (loginParams: LoginParams) => {
     const response = await doRequest({
-      url: "/v1/login",
-      method: "POST",
+      url: '/v1/login',
+      method: 'POST',
       body: {
         email: loginParams.email,
-        password: loginParams.password,
-      },
+        password: loginParams.password
+      }
     })
 
+    console.log(response)
+
     set(() => ({ user: response.data }))
-  },
+  }
 })
 
-export default createUserSlice;
+export default createUserSlice

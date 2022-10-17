@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-import useStore from "../stores";
+import useStore from '../stores'
 
-const useMeQuery = () => {
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetched, setIsFetched] = useState(false);
+import { User } from '../types/domain'
+import { HookState } from '../types/hooks'
 
-  const user = useStore((state) => state.user);
+const useMeQuery = (): HookState<User> => {
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isFetched, setIsFetched] = useState(false)
+
+  const user = useStore((state) => state.user)
   // const setUser = useStore((state) => state.setUser)
 
-  const fetchMe = async () => {
+  const fetchMe = async (): Promise<void> => {
     setError('')
     setIsLoading(true)
     setIsFetched(true)
@@ -22,20 +25,20 @@ const useMeQuery = () => {
     // }
 
     setIsLoading(false)
-  };
+  }
 
   useEffect(() => {
     if (!isFetched) {
       fetchMe()
     }
-  }, [isFetched]);
-  
+  }, [isFetched])
+
   return {
     data: user,
     error,
     isLoading,
-    refetch: () => setIsFetched(false),
+    refetch: () => setIsFetched(false)
   }
-};
+}
 
-export default useMeQuery;
+export default useMeQuery

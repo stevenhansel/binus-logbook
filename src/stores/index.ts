@@ -1,11 +1,11 @@
-import create from "zustand"
+import create from 'zustand'
 
-import createUserSlice from "./user";
+import createUserSlice from './user'
 
-import { UserSlice } from "../types/stores";
+import { UserSlice } from '../types/stores'
 
 const useStore = create<UserSlice>()((...a) => ({
   ...createUserSlice(...a)
-}));
+}))
 
-export default useStore;
+export default useStore

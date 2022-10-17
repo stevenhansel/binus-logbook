@@ -1,11 +1,12 @@
-import { Container } from "@mantine/core";
+import { ReactNode } from 'react'
+import { Container } from '@mantine/core'
 
-const ErrorFallback = () => {
+const ErrorFallback = (): NonNullable<ReactNode> => {
   return (
     <Container>
       Please Wait...
     </Container>
-  );
+  )
 }
 
-export default ErrorFallback;
+export default ErrorFallback

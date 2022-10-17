@@ -1,25 +1,25 @@
-import { useEffect, useMemo, useState } from "react"
-import { Box, Button, Container, Center, Loader, Select, Text } from "@mantine/core"
+import { useEffect, useMemo, useState, ReactNode } from 'react'
+import { Box, Button, Container, Center, Loader, Select, Text } from '@mantine/core'
 
-import useMeQuery from "../../hooks/useMeQuery";
+import useMeQuery from '../../hooks/useMeQuery'
 
-import { Enrichment } from "../../types/domain";
+import { Enrichment } from '../../types/domain'
 
 const initialSelectedEnrichment = ''
 
-const Home = () => {
-  const [selectedEnrichment, setSelectedEnrichment] = useState<string | null>(initialSelectedEnrichment);
-  const { data, isLoading, error, refetch } = useMeQuery();
+const Home = (): ReactNode => {
+  const [selectedEnrichment, setSelectedEnrichment] = useState<string | null>(initialSelectedEnrichment)
+  const { data, isLoading, error, refetch } = useMeQuery()
 
   const enrichmentMapping: Record<string, Enrichment> = useMemo(() => {
-    if (data?.enrichments) {
+    if ((data?.enrichments) != null) {
       return data.enrichments.reduce((acc, cur) => ({
         [cur.semesterName]: cur,
-        ...acc,
-      }), {});
+        ...acc
+      }), {})
     }
     return {}
-  }, [data?.enrichments]);
+  }, [data?.enrichments])
 
   useEffect(() => {
     const enrichmentKeyArr = Object.keys(enrichmentMapping)
@@ -30,7 +30,7 @@ const Home = () => {
     }
   }, [data?.enrichments])
 
-  const isShowSkeleton = selectedEnrichment === '' || selectedEnrichment === null;
+  const isShowSkeleton = selectedEnrichment === '' || selectedEnrichment === null
 
   return (
     <Container size="xs" px="xs" py="xl">
@@ -49,7 +49,7 @@ const Home = () => {
           </Button>
         </Box>
       )}
-      {!isLoading && !error && data && (
+      {!isLoading && !error && (data != null) && (
         <>
           <Center py="xl">
             <Text size="xl" weight="bold">{data.name}</Text>
@@ -65,7 +65,7 @@ const Home = () => {
               onChange={setSelectedEnrichment}
               data={data.enrichments.map((enrichment) => ({
                 value: enrichment.semesterName,
-                label: enrichment.semesterName,
+                label: enrichment.semesterName
               }))}
             />
           </Center>
@@ -85,7 +85,7 @@ const Home = () => {
         </>
       )}
     </Container>
-  );
+  )
 }
 
-export default Home;
+export default Home
