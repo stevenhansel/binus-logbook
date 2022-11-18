@@ -2,8 +2,8 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "yarn build",
-    "beforeDevCommand": "yarn dev && (cd scraper && poetry run start)",
-    "devPath": "http://localhost:5173",
+    "beforeDevCommand": "yarn dev",
+    "devPath": "http://localhost:3000",
     "distDir": "../dist"
   },
   "package": {
