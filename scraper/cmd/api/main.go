@@ -1,16 +1,23 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
 	"github.com/playwright-community/playwright-go"
-	"github.com/stevenhansel/binus-logbook/scraper/internal/grpc"
 	"go.uber.org/zap"
+
+	"github.com/stevenhansel/binus-logbook/scraper/internal/binus"
+	"github.com/stevenhansel/binus-logbook/scraper/internal/grpc"
+	"github.com/stevenhansel/binus-logbook/scraper/internal/queue"
+	"github.com/stevenhansel/binus-logbook/scraper/internal/student"
 )
 
 func main() {
-	// ctx := context.Background()
+	var port int
+	flag.IntVar(&port, "port", 9000, "Port for the gRPC server")
+	flag.Parse()
 
 	log, err := zap.NewProduction()
 	if err != nil {
@@ -21,11 +28,13 @@ func main() {
 		log.Error("An error occurred during the installation process of playwright", zap.String("error", fmt.Sprint(err)))
 	}
 
-	// scraper := binus.New()
-	// studentService := student.NewService(scraper)
+	consumer := queue.NewConsumer()
 
-	fmt.Println("Server has started on localhost:9000")
+	scraper := binus.New()
+	studentService := student.NewService(scraper)
 
-	server := grpc.New()
-	server.Run(9000)
+	fmt.Printf("gRPC Server has started on localhost:%d\n", port)
+
+	server := grpc.New(studentService, consumer)
+	server.Run(int32(port))
 }

@@ -2,16 +2,50 @@ package grpc
 
 import (
 	"context"
-	"log"
 
-	pb "github.com/stevenhansel/binus-logbook/scraper/internal/grpc/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
+
+	result "github.com/stevenhansel/binus-logbook/scraper/internal/grpc/proto/result"
+	scraper "github.com/stevenhansel/binus-logbook/scraper/internal/grpc/proto/scraper"
 )
 
 type grpcServer struct {
-	pb.UnimplementedGreeterServer
+	scraper.UnimplementedScraperServer
+	result.UnimplementedResultListenerServer
+
+	student  StudentQuerier
+	consumer ConsumerQuerier
 }
 
-func (s *grpcServer) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
+func newGrpcServer(student StudentQuerier, consumer ConsumerQuerier) *grpcServer {
+	return &grpcServer{
+		student:  student,
+		consumer: consumer,
+	}
+}
+
+// Scraper
+func (s *grpcServer) Login(ctx context.Context, req *scraper.LoginRequest) (*scraper.TaskResponse, error) {
+	t, err := s.student.Login(ctx, req.Email, req.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	tasks := make([]*scraper.TaskResponse_Task, len(t.Tasks))
+	for i, task := range t.Tasks {
+		tasks[i] = &scraper.TaskResponse_Task{
+			Step: task.Step,
+			Name: task.Name,
+		}
+	}
+
+	return &scraper.TaskResponse{
+		Title: t.Title,
+		Tasks: tasks,
+	}, nil
+}
+
+// Result
+func (s *grpcServer) Listen(empty *emptypb.Empty, stream result.ResultListener_ListenServer) error {
+	return s.consumer.Consume(stream)
 }

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/stevenhansel/binus-logbook/scraper/internal/grpc/proto/result";
+
+package result;
+
+service ResultListener {
+  rpc Listen(google.protobuf.Empty) returns (stream Reply) {}
+}
+
+message Reply {
+  int32 step = 1;
+  string name = 2;
+  google.protobuf.Any data = 3;
+}

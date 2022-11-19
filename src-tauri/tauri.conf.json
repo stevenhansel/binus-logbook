@@ -12,10 +12,11 @@
   },
   "tauri": {
     "allowlist": {
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["http://localhost:8080/**"]
+      "shell": {
+        "sidecar": true,
+        "scope": [
+          { "name": "../dist/api", "sidecar": true }
+        ]
       }
     },
     "bundle": {
@@ -25,7 +26,9 @@
       "deb": {
         "depends": []
       },
-      "externalBin": [],
+      "externalBin": [
+        "../dist/api"
+      ],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/stevenhansel/binus-logbook/scraper/internal/grpc/proto/scraper";
+
+package scraper;
+
+service Scraper {
+  rpc Login (LoginRequest) returns (TaskResponse) {}
+}
+
+message TaskResponse {
+  message Task {
+    int32 step = 1;
+    string name = 2;
+  }
+
+  string title = 1;
+  repeated Task tasks = 2;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}

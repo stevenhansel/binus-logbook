@@ -18,15 +18,17 @@ tonic-build = "0.8"
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.1.1", features = ["http-all"] }
+tauri = { version = "1.1.1", features = ["process-command-api", "shell-sidecar"] }
 tonic = "0.8"
-prost = "0.11"
+prost = "0.11.2"
+prost-types = "0.11.2"
 futures-core = "0.3"
 futures-util = "0.3"
 tokio = { version = "1.0", features = ["rt-multi-thread", "macros", "sync", "time"] }
 tokio-stream = "0.1"
 async-stream = "0.2"
 rand = "0.7"
+portpicker = "0.1.1"
 
 [features]
 # by default Tauri runs in production mode

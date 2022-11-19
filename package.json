@@ -8,8 +8,8 @@
     "astro:build": "astro build",
     "scraper:dev": "cd scraper && make run",
     "scraper:build": "cd scraper && make build dist=../dist/api",
-    "dev": "concurrently \"yarn astro:dev\" \"yarn scraper:dev\"",
-    "build": "concurrently \"yarn astro:build\" \"yarn scraper:build\"",
+    "dev": "yarn scraper:build && yarn astro:dev",
+    "build": "yarn scraper:build && yarn astro:build",
     "preview": "astro preview",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "eslint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
