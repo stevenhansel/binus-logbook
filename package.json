@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "astro:dev": "astro dev",
-    "scraper:dev": "(cd scraper && go run cmd/api/main.go)",
+    "astro:build": "astro build",
+    "scraper:dev": "cd scraper && make run",
+    "scraper:build": "cd scraper && make build dist=../dist/api",
     "dev": "concurrently \"yarn astro:dev\" \"yarn scraper:dev\"",
-    "build": "astro build",
+    "build": "concurrently \"yarn astro:build\" \"yarn scraper:build\"",
     "preview": "astro preview",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "eslint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
