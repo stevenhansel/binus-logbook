@@ -1,26 +1,16 @@
 package main
 
 import (
-	"context"
-	"errors"
 	"fmt"
-	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/playwright-community/playwright-go"
+	"github.com/stevenhansel/binus-logbook/scraper/internal/grpc"
 	"go.uber.org/zap"
-
-	"github.com/stevenhansel/binus-logbook/scraper/internal/binus"
-	"github.com/stevenhansel/binus-logbook/scraper/internal/container"
-	internalhttp "github.com/stevenhansel/binus-logbook/scraper/internal/http"
-	"github.com/stevenhansel/binus-logbook/scraper/internal/http/responseutil"
-	"github.com/stevenhansel/binus-logbook/scraper/internal/student"
 )
 
 func main() {
-	ctx := context.Background()
+	// ctx := context.Background()
 
 	log, err := zap.NewProduction()
 	if err != nil {
@@ -31,31 +21,11 @@ func main() {
 		log.Error("An error occurred during the installation process of playwright", zap.String("error", fmt.Sprint(err)))
 	}
 
-	responseutil := responseutil.New(log)
+	// scraper := binus.New()
+	// studentService := student.NewService(scraper)
 
-	binusScraper := binus.New()
-	studentService := student.NewService(binusScraper)
+	fmt.Println("Server has started on localhost:9000")
 
-	container := container.New(log, responseutil, studentService)
-	server := internalhttp.New(container)
-
-	stop := make(chan struct{})
-	go func() {
-		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
-		<-sigint
-
-		if err := server.Shutdown(ctx); err != nil {
-			log.Error("An error occurred during shutting down the server", zap.String("error", fmt.Sprint(err)))
-		}
-
-		close(stop)
-	}()
-
-	log.Info("Scraper API has started running on http://localhost:8080")
-	if err := server.Serve(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		log.Error("An error occurred during serving the server", zap.String("error", fmt.Sprint(err)))
-	}
-
-	<-stop
+	server := grpc.New()
+	server.Run(9000)
 }

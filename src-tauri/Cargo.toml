@@ -1,11 +1,11 @@
 [package]
-name = "app"
+name = "binus-logbook"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+description = "A simple desktop application to help BINUS students save time filling the logbooks"
+authors = ["Steven Hansel", "Jovan Frandika"]
+license = "MIT"
+repository = "https://github.com/stevenhansel/binus-logbook"
+default-run = "binus-logbook"
 edition = "2021"
 rust-version = "1.57"
 
@@ -13,11 +13,20 @@ rust-version = "1.57"
 
 [build-dependencies]
 tauri-build = { version = "1.1.1", features = [] }
+tonic-build = "0.8"
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.1.1", features = ["http-all"] }
+tonic = "0.8"
+prost = "0.11"
+futures-core = "0.3"
+futures-util = "0.3"
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros", "sync", "time"] }
+tokio-stream = "0.1"
+async-stream = "0.2"
+rand = "0.7"
 
 [features]
 # by default Tauri runs in production mode

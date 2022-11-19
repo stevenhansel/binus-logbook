@@ -1,7 +1,7 @@
 package student
 
-import "github.com/stevenhansel/binus-logbook/scraper/internal/binus"
+import "github.com/stevenhansel/binus-logbook/scraper/internal/models"
 
-type BinusScraperQuerier interface {
-	Login(email, password string) (*binus.Student, error)
+type Scraper interface {
+	Login(email, password string) (*models.Student, error)
 }

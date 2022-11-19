@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/playwright-community/playwright-go"
+
+	"github.com/stevenhansel/binus-logbook/scraper/internal/models"
 )
 
 const (
@@ -16,33 +18,6 @@ type BinusScraper struct{}
 
 func New() *BinusScraper {
 	return &BinusScraper{}
-}
-
-type Student struct {
-	Name  string
-	Email string
-	// ProfilePictureURL string (do this later because base64 encoding)
-	Enrichments []Enrichment
-}
-
-type Enrichment struct {
-	SemesterName              string
-	SemesterValue             string
-	Track                     string
-	CompanyPartner            string
-	Position                  string
-	Location                  string
-	WorkingOfficeHours        string
-	SiteSupervisorName        string
-	SiteSupervisorEmail       string
-	SiteSupervisorPhoneNumber string
-	FacultySupervisor         string
-	OfficePhoneNumber         string
-}
-
-type Semester struct {
-	Name  string
-	Value string
 }
 
 var studentDashboardParseTable = map[string]string{
@@ -58,7 +33,7 @@ var studentDashboardParseTable = map[string]string{
 	"Faculty Supervisor:":           "FacultySupervisor",
 }
 
-func (s *BinusScraper) Login(email, password string) (*Student, error) {
+func (s *BinusScraper) Login(email, password string) (*models.Student, error) {
 	pw, err := playwright.Run()
 	if err != nil {
 		return nil, err
@@ -132,7 +107,7 @@ func (s *BinusScraper) Login(email, password string) (*Student, error) {
 		return nil, err
 	}
 
-	semesters := []*Semester{}
+	semesters := []*models.Semester{}
 	for _, option := range selectOptionNodes {
 		semesterName, err := option.InnerText()
 		if err != nil {
@@ -143,13 +118,13 @@ func (s *BinusScraper) Login(email, password string) (*Student, error) {
 			return nil, err
 		}
 
-		semesters = append(semesters, &Semester{
+		semesters = append(semesters, &models.Semester{
 			Name:  strings.TrimSpace(semesterName),
 			Value: semesterValue,
 		})
 	}
 
-	enrichments := []Enrichment{}
+	enrichments := []models.Enrichment{}
 	for _, semester := range semesters {
 		changeSemesterSelectInput, err := page.QuerySelector("select[name=ddSemester]")
 		if err != nil {
@@ -186,7 +161,7 @@ func (s *BinusScraper) Login(email, password string) (*Student, error) {
 			}
 		}
 
-		currentEnrichment := Enrichment{}
+		currentEnrichment := models.Enrichment{}
 
 		val := reflect.ValueOf(&currentEnrichment).Elem()
 		for i := 0; i < val.NumField(); i++ {
@@ -202,7 +177,7 @@ func (s *BinusScraper) Login(email, password string) (*Student, error) {
 		enrichments = append(enrichments, currentEnrichment)
 	}
 
-	return &Student{
+	return &models.Student{
 		Name:        studentName,
 		Email:       email,
 		Enrichments: enrichments,
