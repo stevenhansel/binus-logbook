@@ -4,9 +4,11 @@
 )]
 
 pub mod app;
-pub mod config;
 pub mod commands;
+pub mod config;
+pub mod events;
 pub mod grpc;
+pub mod models;
 
 fn main() {
     app::run()
