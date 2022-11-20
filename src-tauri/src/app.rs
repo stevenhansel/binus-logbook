@@ -12,7 +12,6 @@ pub fn run() {
         None => 9000,
     };
 
-    println!("spawning the child");
     let (mut rx, _child) = Command::new_sidecar("api")
         .expect("failed to create `api` binary command")
         .args(["-port", scraper_port.to_string().as_str()])
