@@ -29,6 +29,8 @@ func (s *Server) Run(port int32) error {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	fmt.Println("started")
+
 	srv := grpc.NewServer()
 	grpcServer := newGrpcServer(s.student, s.consumer)
 

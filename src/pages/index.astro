@@ -1,13 +1,12 @@
 ---
+import { ClientLayout } from 'components/organisms';
 import { Login } from 'components/templates';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 const pageTitle = "Login";
-
-let email = "";
-let password = "";
 ---
 <BaseLayout pageTitle={pageTitle}>
   <div class="flex flex-col max-w-[512px] mx-auto">
-    <Login client:load />
+    <Login client:only />
   </div>
 </BaseLayout>

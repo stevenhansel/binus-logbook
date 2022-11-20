@@ -1,5 +1,5 @@
 use portpicker::pick_unused_port;
-use tauri::{api::process::Command, generate_handler};
+use tauri::{api::process::{Command, CommandEvent}, generate_handler};
 
 use crate::{
     commands,
@@ -12,7 +12,8 @@ pub fn run() {
         None => 9000,
     };
 
-    Command::new_sidecar("api")
+    println!("spawning the child");
+    let (mut rx, _child) = Command::new_sidecar("api")
         .expect("failed to create `api` binary command")
         .args(["-port", scraper_port.to_string().as_str()])
         .spawn()
@@ -21,8 +22,17 @@ pub fn run() {
     tauri::Builder::default()
         .setup(move |app| {
             let handle = app.handle();
-
             tauri::async_runtime::spawn(async move {
+                // Wait for the server to listen to the port
+                while let Some(event) = rx.recv().await {
+                    if let CommandEvent::Stdout(line) = event {
+                        if line == "started" {
+                            println!("Scraper's gRPC server has started");
+                            break;
+                        }
+                    }
+                }
+
                 let conn = ResultListenerClient::connect(format!("http://[::1]:{}", scraper_port))
                     .await
                     .unwrap();
